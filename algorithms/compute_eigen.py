@@ -16,22 +16,22 @@ def compute_eigen(L, k):
 
   
 
-def num_cluster(vals_arnoldi, k ,title):
+def num_cluster(vals, k ,title):
     # Plot the eigenvalues to visualize any gaps
     fig = plt.figure(figsize=(6, 4))
-    plt.plot(range(1, k+1), vals_arnoldi, 'o-')
+    plt.plot(range(1, k+1), vals, 'o-')
     plt.xlabel('Eigenvalue index')
     plt.ylabel('Eigenvalue')
     plt.title(f"{title} - Arnoldi")
   # Compute the gaps between consecutive eigenvalues
-    gaps = np.diff(vals_arnoldi)
+    gaps = np.diff(vals)
     # Choose the number of clusters as the index of the largest gap
     num_clusters = np.argmax(gaps) + 1
 
     print(f'Number of clusters for {title} using Arnoldi algorithm:', num_clusters)
 
     # Plot a red circle at the location of the largest gap
-    plt.plot(num_clusters, vals_arnoldi[num_clusters - 1], 'o', color='r', markersize=10)
+    plt.plot(num_clusters, vals[num_clusters - 1], 'o', color='r', markersize=10)
     plt.show()
 
     return num_clusters
