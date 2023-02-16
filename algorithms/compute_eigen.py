@@ -6,13 +6,17 @@ import matplotlib.pyplot as plt
 def compute_eigen(L, k):
         
     # Compute eigenvalues using Arnoldi method 
-    vals_arnoldi, vecs_arnoldi = spla.eigsh(L, k=k, which='SM', v0=None, maxiter=1000, tol=1e-6)
+    vals, vecs = spla.eigsh(L, k=k, which='SM', v0=None, maxiter=1000, tol=1e-6)
 
     # Compute eigenvalues using shift-invert method
     # sigma = 0.1  # choose a shift parameter
     # vals_shift, vecs_shift = spla.eigsh(L, k=k, sigma=sigma)
 
-    return vals_arnoldi, vecs_arnoldi
+    # Sort the eigenvalues in ascending order and plot them
+    sorted_indices = np.argsort(vals)
+    sorted_vals = vals[sorted_indices]
+
+    return vals, vecs, sorted_vals
 
   
 
