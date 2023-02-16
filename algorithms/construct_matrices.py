@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.sparse import coo_matrix
+from scipy.sparse import csr_matrix
 
 def construct_matrices(X, k, sigma):
     """
@@ -29,3 +30,18 @@ def construct_matrices(X, k, sigma):
     D = coo_matrix((degrees, (np.arange(n_samples), np.arange(n_samples))), shape=(n_samples, n_samples))
     L = D - W
     return W, D, L
+
+
+def construct_sparse_matrices(W):
+    # Construct the degree matrix D
+    D = np.diag(np.sum(W, axis=1))
+    D_sparse = csr_matrix(D)
+
+    # Construct the Laplacian matrix L
+    L = D - W
+    L_sparse = csr_matrix(L)
+
+    # Convert the weighted adjacency matrix W to sparse format
+    W_sparse = csr_matrix(W)
+
+    return L_sparse, D_sparse, W_sparse
