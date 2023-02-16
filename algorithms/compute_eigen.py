@@ -3,7 +3,7 @@ import scipy.sparse as sp
 import scipy.sparse.linalg as spla
 import matplotlib.pyplot as plt
 
-def compute_eigenvalues_clusters(L, k, title):
+def compute_eigen(L, k):
         
     # Compute eigenvalues using Arnoldi method 
     vals_arnoldi, vecs_arnoldi = spla.eigsh(L, k=k, which='SM', v0=None, maxiter=1000, tol=1e-6)
@@ -12,6 +12,11 @@ def compute_eigenvalues_clusters(L, k, title):
     # sigma = 0.1  # choose a shift parameter
     # vals_shift, vecs_shift = spla.eigsh(L, k=k, sigma=sigma)
 
+    return vals_arnoldi, vecs_arnoldi
+
+  
+
+def num_cluster(vals_arnoldi, k ,title):
     # Plot the eigenvalues to visualize any gaps
     fig = plt.figure(figsize=(6, 4))
     plt.plot(range(1, k+1), vals_arnoldi, 'o-')
@@ -19,7 +24,6 @@ def compute_eigenvalues_clusters(L, k, title):
     plt.ylabel('Eigenvalue')
     plt.title(f"{title} - Arnoldi")
     plt.show()
-
   # Compute the gaps between consecutive eigenvalues
     gaps = np.diff(vals_arnoldi)
     # Choose the number of clusters as the index of the largest gap
@@ -27,4 +31,4 @@ def compute_eigenvalues_clusters(L, k, title):
 
     print(f'Number of clusters for {title} using Arnoldi algorithm:', num_clusters)
 
-    return vals_arnoldi, num_clusters
+    return num_clusters
