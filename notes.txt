@@ -1,0 +1,23 @@
+The data-sets of N points to be used are contained in the files Circle.csv and Spiral.csv. The file Circle.csv contains two columns
+corresponding to x-values and y-values of the points; the file Spiral.csv contains
+three columns, the third one contains the index of the correct cluster.
+
+Recall that, given a similarity function s[i,j] for two points, the similarity
+graph is denoted by G = (V, E), where V = v1, ..., vn denotes a non-empty
+set of vertices and E denotes the set of edges, i.e., a set of pair of vertices.
+In the similarity graph each vertex vi ∈ V represents a data point Xi. 
+An edge between two vertices vi and vj exists if the similarity sij between the
+corresponding data points Xi and Xj is either positive or larger than a certain
+threshold (minimum similarity value ε for a connection to take place between
+two data points). We assume that sij = sji and that the edge connecting vi
+and vj is weighted by sij . Consequently, it turns out that the similarity graph
+is undirected. The weighted adjacency matrix is defined as Wij = sij , if i != j
+and Wij = 0, if i = j
+
+For both the data-sets address the following items.
+
+Given a set of data points X and the similarity function
+si,j = exp ( -||Xi − Xj||**2 / 2σ**2),
+construct the k-nearest neighborhood similarity graph and its adjacency
+matrix W. Note that the adjacency matrix W has zero-values on the
+diagonal by definition. Try several values of k = 10, 20, 40. Use σ = 1.
