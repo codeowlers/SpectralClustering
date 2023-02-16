@@ -3,7 +3,7 @@ import scipy.sparse as sp
 import scipy.sparse.linalg as spla
 import matplotlib.pyplot as plt
 
-def compute_eigenvalues(L, k, title):
+def compute_eigenvalues_clusters(L, k, title):
         
     # Compute eigenvalues using Arnoldi method 
     vals_arnoldi, vecs_arnoldi = spla.eigsh(L, k=k, which='SM', v0=None, maxiter=1000, tol=1e-6)
@@ -27,4 +27,4 @@ def compute_eigenvalues(L, k, title):
 
     print(f'Number of clusters for {title} using Arnoldi algorithm:', num_clusters)
 
-    return vals_arnoldi
+    return vals_arnoldi, num_clusters
