@@ -4,6 +4,7 @@ from scipy.sparse import csr_matrix
 import numpy as np
 from scipy.sparse import csr_matrix
 
+
 def construct_laplacian(W):
     # Construct the degree matrix D
     D = np.diag(np.sum(W, axis=1))
