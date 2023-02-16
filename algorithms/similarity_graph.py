@@ -1,24 +1,26 @@
+from scipy.sparse import dok_matrix
 import numpy as np
-from scipy.spatial.distance import cdist
 
-
-# k represents the number of clusters that we want to identify in the data
-# sigma (σ) is a parameter that controls the width of the Gaussian kernel
-# used to compute the pairwise similarities between data points
 def construct_similarity_graph(X, k, sigma):
-    # Compute the pairwise similarity matrix
-    S = np.exp(-cdist(X, X, 'sqeuclidean') / (2 * sigma ** 2))
+    # Extract only the first two columns of X
+    X = X[:, :2]
 
-    # Construct the adjacency matrix
-    W = np.zeros((len(X), len(X)))
-    for i in range(len(X)):
-        dists = [(j, S[i, j]) for j in range(len(X)) if j != i]
-        dists.sort(key=lambda x: x[1])
-        for j, _ in dists[:k]:
-            W[i, j] = S[i, j]
-            W[j, i] = S[j, i]
+    # Initialize a sparse adjacency matrix
+    N = len(X)
+    W = dok_matrix((N, N), dtype=float)
+
+    # Compute similarity for each point
+    for i in range(N):
+        # Compute similarity with every other point
+        diff = X - X[i]
+        sim = np.exp(-np.sum(diff ** 2, axis=1) / (2 * sigma ** 2))
+        sim[i] = 0  # Set similarity with itself to 0
+        top_k_idx = np.argsort(-sim)[:k]  # Get the indices of the K most similar points
+        top_k_sim = sim[top_k_idx]  # Get the similarity values of the K most similar points
+        W[i, top_k_idx] = top_k_sim  # Set values of the adjacency matrix
+        W[top_k_idx, i] = top_k_sim
 
     # Set the diagonal elements of W to 0
-    np.fill_diagonal(W, 0)
+    W.setdiag(0)
 
-    return W
+    return W.toarray()
