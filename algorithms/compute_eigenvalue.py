@@ -1,20 +1,30 @@
 import numpy as np
-from scipy.sparse.linalg import eigsh
-def compute_eigenvalues(L, k):
-    # Compute the first k smallest eigenvalues and corresponding eigenvectors of the Laplacian matrix
-    num_eigvals = min(k, L.shape[0]-1)
-    eigvals, eigvecs = eigsh(L, k=num_eigvals, which='SM')
+import scipy.sparse as sp
+import scipy.sparse.linalg as spla
+import matplotlib.pyplot as plt
 
-    # Sort the eigenvalues in ascending order
-    sorted_eigvals = np.sort(eigvals)
+def compute_eigenvalues(L, k, title):
+        
+    # Compute eigenvalues using Arnoldi method 
+    vals_arnoldi, vecs_arnoldi = spla.eigsh(L, k=k, which='SM', v0=None, maxiter=1000, tol=1e-6)
 
-    # Plot the sorted eigenvalues
-    import matplotlib.pyplot as plt
-    plt.plot(sorted_eigvals)
+    # Compute eigenvalues using shift-invert method
+    # sigma = 0.1  # choose a shift parameter
+    # vals_shift, vecs_shift = spla.eigsh(L, k=k, sigma=sigma)
+
+    # Plot the eigenvalues to visualize any gaps
+    fig = plt.figure(figsize=(6, 4))
+    plt.plot(range(1, k+1), vals_arnoldi, 'o-')
+    plt.xlabel('Eigenvalue index')
+    plt.ylabel('Eigenvalue')
+    plt.title(f"{title} - Arnoldi")
     plt.show()
 
-    # Choose the number of clusters based on the number of small eigenvalues
-    num_clusters = np.sum(sorted_eigvals < 1e-10)  # or adjust the threshold as needed
-    print("Number of clusters: ", num_clusters) 
+  # Compute the gaps between consecutive eigenvalues
+    gaps = np.diff(vals_arnoldi)
+    # Choose the number of clusters as the index of the largest gap
+    num_clusters = np.argmax(gaps) + 1
 
-    return sorted_eigvals, eigvals
+    print(f'Number of clusters for {title} using Arnoldi algorithm:', num_clusters)
+
+    return vals_arnoldi
