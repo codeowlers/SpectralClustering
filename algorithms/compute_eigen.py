@@ -23,12 +23,15 @@ def num_cluster(vals_arnoldi, k ,title):
     plt.xlabel('Eigenvalue index')
     plt.ylabel('Eigenvalue')
     plt.title(f"{title} - Arnoldi")
-    plt.show()
   # Compute the gaps between consecutive eigenvalues
     gaps = np.diff(vals_arnoldi)
     # Choose the number of clusters as the index of the largest gap
     num_clusters = np.argmax(gaps) + 1
 
     print(f'Number of clusters for {title} using Arnoldi algorithm:', num_clusters)
+
+    # Plot a red circle at the location of the largest gap
+    plt.plot(num_clusters, vals_arnoldi[num_clusters - 1], 'o', color='r', markersize=10)
+    plt.show()
 
     return num_clusters
